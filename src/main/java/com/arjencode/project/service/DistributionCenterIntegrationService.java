@@ -167,6 +167,167 @@ public class DistributionCenterIntegrationService {
         }
     }
     
+    // Get distribution center by ID with items
+    public Map<String, Object> getDistributionCenterById(Long id) {
+        try {
+            HttpEntity<String> entity = new HttpEntity<>(createAuthHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                distributionCenterApiUrl + "/" + id, HttpMethod.GET, entity, String.class);
+            
+            if (response.getStatusCode() == HttpStatus.OK) {
+                JsonNode centerNode = objectMapper.readTree(response.getBody());
+                Map<String, Object> center = new HashMap<>();
+                center.put("id", centerNode.get("id").asLong());
+                center.put("name", centerNode.get("name").asText());
+                center.put("latitude", centerNode.get("latitude").asDouble());
+                center.put("longitude", centerNode.get("longitude").asDouble());
+                
+                // Calculate distance
+                double distance = calculateDistance(
+                    warehouseLatitude, warehouseLongitude,
+                    centerNode.get("latitude").asDouble(),
+                    centerNode.get("longitude").asDouble()
+                );
+                center.put("distanceFromWarehouse", Math.round(distance * 100.0) / 100.0);
+                
+                // Get items if available
+                List<Map<String, Object>> items = new ArrayList<>();
+                if (centerNode.has("items") && centerNode.get("items").isArray()) {
+                    for (JsonNode itemNode : centerNode.get("items")) {
+                        Map<String, Object> item = new HashMap<>();
+                        item.put("id", itemNode.get("id").asLong());
+                        item.put("name", itemNode.get("name").asText());
+                        item.put("brand", itemNode.get("brand").asText());
+                        item.put("category", itemNode.get("category").asText());
+                        item.put("price", itemNode.get("price").asDouble());
+                        item.put("year", itemNode.get("year").asInt());
+                        item.put("quantity", itemNode.get("quantity").asInt());
+                        items.add(item);
+                    }
+                }
+                center.put("items", items);
+                center.put("itemCount", items.size());
+                
+                return center;
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting distribution center by ID: " + e.getMessage());
+        }
+        return null;
+    }
+    
+    // Add item to distribution center
+    public boolean addItemToDistributionCenter(Long centerId, String name, String brand, 
+                                             String category, Double price, Integer year, Integer quantity) {
+        try {
+            Map<String, Object> itemData = new HashMap<>();
+            itemData.put("name", name);
+            itemData.put("brand", brand);
+            itemData.put("category", category);
+            itemData.put("price", price);
+            itemData.put("year", year);
+            itemData.put("quantity", quantity);
+            
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(itemData, createAuthHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                distributionCenterApiUrl + "/" + centerId + "/items", 
+                HttpMethod.POST, entity, String.class);
+            
+            return response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.CREATED;
+        } catch (Exception e) {
+            System.err.println("Error adding item to distribution center: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    // Delete item from distribution center
+    public boolean deleteItemFromDistributionCenter(Long centerId, Long itemId) {
+        try {
+            HttpEntity<String> entity = new HttpEntity<>(createAuthHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                distributionCenterApiUrl + "/" + centerId + "/items/" + itemId, 
+                HttpMethod.DELETE, entity, String.class);
+            
+            return response.getStatusCode() == HttpStatus.OK || response.getStatusCode() == HttpStatus.NO_CONTENT;
+        } catch (Exception e) {
+            System.err.println("Error deleting item from distribution center: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    // Request item with custom quantity
+    public boolean requestItemFromClosestCenterWithQuantity(String brand, String name, Integer quantity) {
+        try {
+            // Find closest center with the item
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("brand", brand);
+            requestBody.put("name", name);
+            
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, createAuthHeaders());
+            
+            String findClosestUrl = distributionCenterApiUrl + "/find-closest" +
+                "?warehouseLatitude=" + warehouseLatitude +
+                "&warehouseLongitude=" + warehouseLongitude;
+            
+            ResponseEntity<String> response = restTemplate.exchange(
+                findClosestUrl, HttpMethod.POST, entity, String.class);
+            
+            if (response.getStatusCode() == HttpStatus.OK) {
+                JsonNode centerNode = objectMapper.readTree(response.getBody());
+                Long centerId = centerNode.get("id").asLong();
+                String centerName = centerNode.get("name").asText();
+                
+                System.out.println("Found item at: " + centerName + " (ID: " + centerId + ")");
+                
+                // Request the specified quantity from this center
+                String requestUrl = distributionCenterApiUrl + "/" + centerId + "/request?quantity=" + quantity;
+                ResponseEntity<String> requestResponse = restTemplate.exchange(
+                    requestUrl, HttpMethod.POST, entity, String.class);
+                
+                if (requestResponse.getStatusCode() == HttpStatus.OK) {
+                    // Add items to warehouse stock
+                    return addItemsToWarehouse(brand, name, quantity, centerNode);
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error requesting item with quantity from distribution center: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    // Add multiple items to warehouse stock
+    private boolean addItemsToWarehouse(String brand, String name, Integer quantity, JsonNode centerResponse) {
+        try {
+            // Check if item already exists in warehouse
+            Optional<Item> existingItem = itemRepository.findByBrandAndName(brand, name)
+                .stream().findFirst();
+            
+            if (existingItem.isPresent()) {
+                // Update quantity
+                Item item = existingItem.get();
+                item.setQuantity(item.getQuantity() + quantity);
+                itemRepository.save(item);
+                System.out.println("Updated warehouse stock for: " + name + " by " + brand + " (+" + quantity + ")");
+            } else {
+                // Create new item in warehouse
+                Item newItem = new Item();
+                newItem.setName(name);
+                newItem.setBrand(brand);
+                newItem.setCategory("Unknown"); // Default category
+                newItem.setPrice(new BigDecimal("0.00")); // Default price
+                newItem.setYear(2023); // Default year
+                newItem.setQuantity(quantity);
+                itemRepository.save(newItem);
+                System.out.println("Added new item to warehouse: " + name + " by " + brand + " (quantity: " + quantity + ")");
+            }
+            return true;
+        } catch (Exception e) {
+            System.err.println("Error adding items to warehouse: " + e.getMessage());
+            return false;
+        }
+    }
+
     // Calculate distance using Haversine formula
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371; // Radius of the earth in km
