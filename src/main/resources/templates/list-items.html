@@ -313,14 +313,17 @@
                         >
                           <i class="fas fa-edit"></i>
                         </a>
-                        <a
-                          th:href="@{/items/delete/{id}(id=${item.id})}"
+                        <button
                           class="btn btn-sm btn-outline-danger"
                           title="Delete Item"
-                          onclick="return confirm('Are you sure you want to delete this item?')"
+                          data-bs-toggle="modal"
+                          data-bs-target="#deleteModal"
+                          th:data-item-id="${item.id}"
+                          th:data-item-name="${item.name}"
+                          th:data-item-brand="${item.brand}"
                         >
                           <i class="fas fa-trash"></i>
-                        </a>
+                        </button>
                       </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(items)}">
@@ -395,6 +398,56 @@
       </div>
     </div>
 
+    <!-- Delete Confirmation Modal -->
+    <div
+      class="modal fade"
+      id="deleteModal"
+      tabindex="-1"
+      aria-labelledby="deleteModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header bg-danger text-white">
+            <h5 class="modal-title" id="deleteModalLabel">
+              <i class="fas fa-exclamation-triangle me-2"></i>Confirm Delete
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex align-items-center">
+              <i class="fas fa-trash-alt fa-3x text-danger me-3"></i>
+              <div>
+                <p class="mb-2">Are you sure you want to delete this item?</p>
+                <p class="mb-0">
+                  <strong id="deleteItemName"></strong> by
+                  <strong id="deleteItemBrand"></strong>
+                </p>
+                <small class="text-muted">This action cannot be undone.</small>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              <i class="fas fa-times me-2"></i>Cancel
+            </button>
+            <a id="confirmDeleteBtn" href="#" class="btn btn-danger">
+              <i class="fas fa-trash me-2"></i>Delete Item
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
       function filterByBrandAndYear2022() {
@@ -431,6 +484,27 @@
         urlParams.set("page", "0"); // Reset to first page
         window.location.href = `/items/list?${urlParams.toString()}`;
       }
+
+      // Handle delete modal
+      document.addEventListener("DOMContentLoaded", function () {
+        const deleteModal = document.getElementById("deleteModal");
+        if (deleteModal) {
+          const deleteItemName = document.getElementById("deleteItemName");
+          const deleteItemBrand = document.getElementById("deleteItemBrand");
+          const confirmDeleteBtn = document.getElementById("confirmDeleteBtn");
+
+          deleteModal.addEventListener("show.bs.modal", function (event) {
+            const button = event.relatedTarget;
+            const itemId = button.getAttribute("data-item-id");
+            const itemName = button.getAttribute("data-item-name");
+            const itemBrand = button.getAttribute("data-item-brand");
+
+            deleteItemName.textContent = itemName;
+            deleteItemBrand.textContent = itemBrand;
+            confirmDeleteBtn.href = "/items/delete/" + itemId;
+          });
+        }
+      });
     </script>
   </body>
 </html>
