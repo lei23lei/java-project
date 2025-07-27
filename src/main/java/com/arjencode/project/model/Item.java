@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
@@ -33,8 +34,13 @@ public class Item {
     private BigDecimal price;
     
     @NotNull(message = "Year is required")
-    @Column(nullable = false)
+    @Column(name = "item_year", nullable = false)
     private Integer year;
+    
+    @NotNull(message = "Quantity is required")
+    @PositiveOrZero(message = "Quantity must be zero or positive")
+    @Column(nullable = false)
+    private Integer quantity = 0;
     
     @Column(name = "created_at")
     private LocalDateTime createdAt;
@@ -56,6 +62,18 @@ public class Item {
         this.category = category;
         this.price = price;
         this.year = year;
+        this.quantity = 0;
+    }
+    
+    // Constructor with quantity
+    public Item(String name, String brand, String category, BigDecimal price, Integer year, Integer quantity) {
+        this();
+        this.name = name;
+        this.brand = brand;
+        this.category = category;
+        this.price = price;
+        this.year = year;
+        this.quantity = quantity;
     }
     
     // Getters and Setters
@@ -107,6 +125,14 @@ public class Item {
         this.year = year;
     }
     
+    public Integer getQuantity() {
+        return quantity;
+    }
+    
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
+    
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -137,6 +163,7 @@ public class Item {
                 ", category='" + category + '\'' +
                 ", price=" + price +
                 ", year=" + year +
+                ", quantity=" + quantity +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

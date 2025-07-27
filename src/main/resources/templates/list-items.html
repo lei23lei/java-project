@@ -22,9 +22,14 @@
             <h2 class="text-primary">
               <i class="fas fa-tshirt me-2"></i>Clothes Warehouse
             </h2>
-            <a href="/items/add" class="btn btn-success">
-              <i class="fas fa-plus me-2"></i>Add New Item
-            </a>
+            <div>
+              <a href="/admin/dashboard" class="btn btn-outline-primary me-2">
+                <i class="fas fa-cogs me-2"></i>Admin Dashboard
+              </a>
+              <a href="/items/add" class="btn btn-success">
+                <i class="fas fa-plus me-2"></i>Add New Item
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -215,6 +220,7 @@
                       <th>Category</th>
                       <th>Price</th>
                       <th>Year</th>
+                      <th>Quantity</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
@@ -252,6 +258,12 @@
                         ></span>
                       </td>
                       <td>
+                        <span
+                          class="badge bg-warning text-dark"
+                          th:text="${item.quantity}"
+                        ></span>
+                      </td>
+                      <td>
                         <a
                           th:href="@{/items/{id}(id=${item.id})}"
                           class="btn btn-sm btn-outline-primary"
@@ -261,7 +273,7 @@
                       </td>
                     </tr>
                     <tr th:if="${#lists.isEmpty(items)}">
-                      <td colspan="7" class="text-center py-4">
+                      <td colspan="8" class="text-center py-4">
                         <i class="fas fa-box-open fa-2x text-muted mb-2"></i>
                         <p class="text-muted">No items found</p>
                       </td>

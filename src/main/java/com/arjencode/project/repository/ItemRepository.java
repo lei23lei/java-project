@@ -25,6 +25,9 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     // Find items by brand and year with pagination and sorting
     Page<Item> findByBrandAndYear(String brand, Integer year, Pageable pageable);
     
+    // Find items by brand and name (for integration service)
+    List<Item> findByBrandAndName(String brand, String name);
+    
     // Custom query to find items by specific brand and year 2022
     @Query("SELECT i FROM Item i WHERE i.brand = :brand AND i.year = 2022 ORDER BY i.name ASC")
     List<Item> findItemsByBrandAndYear2022(@Param("brand") String brand);
