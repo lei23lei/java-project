@@ -128,6 +128,37 @@ public class ItemController {
         return "item-details";
     }
     
+    // Show form to edit item
+    @GetMapping("/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model) {
+        Item item = itemService.getItemById(id);
+        model.addAttribute("item", item);
+        return "edit-item";
+    }
+    
+    // Handle form submission to update item
+    @PostMapping("/edit/{id}")
+    public String updateItem(@PathVariable Long id,
+                           @Valid @ModelAttribute("item") Item item,
+                           BindingResult result,
+                           Model model) {
+        if (result.hasErrors()) {
+            item.setId(id); // Ensure the ID is preserved
+            return "edit-item";
+        }
+        
+        item.setId(id); // Ensure the ID is set for update
+        itemService.saveItem(item);
+        return "redirect:/items/list";
+    }
+    
+    // Delete item
+    @GetMapping("/delete/{id}")
+    public String deleteItem(@PathVariable Long id) {
+        itemService.deleteItem(id);
+        return "redirect:/items/list";
+    }
+    
     // Home page redirect to list
     @GetMapping("/")
     public String home() {

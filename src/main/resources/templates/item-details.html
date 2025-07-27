@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -23,9 +26,31 @@
                 <h3 class="mb-0">
                   <i class="fas fa-info-circle me-2"></i>Item Details
                 </h3>
-                <a href="/items/list" class="btn btn-light btn-sm">
-                  <i class="fas fa-arrow-left me-2"></i>Back to List
-                </a>
+                <div>
+                  <!-- User info and logout -->
+                  <span
+                    sec:authorize="isAuthenticated()"
+                    class="text-light me-3"
+                  >
+                    <i class="fas fa-user me-1"></i>
+                    <span sec:authentication="name"></span>
+                  </span>
+
+                  <a href="/items/list" class="btn btn-light btn-sm me-2">
+                    <i class="fas fa-arrow-left me-2"></i>Back to List
+                  </a>
+
+                  <form
+                    sec:authorize="isAuthenticated()"
+                    th:action="@{/logout}"
+                    method="post"
+                    class="d-inline"
+                  >
+                    <button type="submit" class="btn btn-outline-light btn-sm">
+                      <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
             <div class="card-body">

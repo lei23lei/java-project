@@ -77,6 +77,14 @@ public class ItemService {
             .orElseThrow(() -> new RuntimeException("Item not found with id: " + id));
     }
     
+    // Delete item by ID
+    public void deleteItem(Long id) {
+        if (!itemRepository.existsById(id)) {
+            throw new RuntimeException("Item not found with id: " + id);
+        }
+        itemRepository.deleteById(id);
+    }
+    
     // Get all items (without pagination for simple listing)
     public List<Item> getAllItemsList() {
         return itemRepository.findAll();
