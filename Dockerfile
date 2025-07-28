@@ -1,5 +1,5 @@
 # Use OpenJDK 21 as the base image
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jdk-alpine
 
 # Set the working directory
 WORKDIR /app
@@ -22,7 +22,7 @@ COPY src src
 RUN ./mvnw clean package -DskipTests
 
 # Create a new stage for the runtime
-FROM openjdk:21-jre-slim
+FROM eclipse-temurin:21-jre-alpine
 
 # Set the working directory
 WORKDIR /app
@@ -39,6 +39,9 @@ ENV JAVA_OPTS="-Xmx512m -Xms256m"
 
 # Create a non-root user for security
 RUN addgroup --system javauser && adduser --system --ingroup javauser javauser
+
+# Install curl for health checks
+RUN apk add --no-cache curl
 
 # Change ownership of the app directory
 RUN chown -R javauser:javauser /app
