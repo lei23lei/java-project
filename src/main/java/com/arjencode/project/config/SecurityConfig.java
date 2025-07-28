@@ -42,7 +42,7 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(authz -> authz
-                .requestMatchers("/login", "/logout", "/error", "/access-denied",
+                .requestMatchers("/login", "/register", "/logout", "/error", "/access-denied",
                                 "/css/**", "/js/**", "/images/**").permitAll()
                 .requestMatchers("/admin/**").hasRole("ADMIN")
                 .requestMatchers("/items/add", "/items/edit/**", "/items/delete/**").hasRole("ADMIN")

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register - Clothes Warehouse</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .register-card {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        border: none;
+        max-width: 500px;
+        width: 100%;
+      }
+      .register-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 20px 20px 0 0;
+        border: none;
+        padding: 30px;
+        text-align: center;
+      }
+      .brand-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
+        opacity: 0.9;
+      }
+      .form-control,
+      .form-select {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+        padding: 12px 15px;
+        font-size: 1rem;
+      }
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+      }
+      .input-group-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        border-radius: 10px 0 0 10px;
+      }
+      .btn-register {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 30px;
+        font-weight: 600;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+      .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+      .btn-login {
+        background: transparent;
+        border: 2px solid #667eea;
+        border-radius: 10px;
+        color: #667eea;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        width: 100%;
+      }
+      .btn-login:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+      .alert {
+        border-radius: 10px;
+        border: none;
+        margin-bottom: 20px;
+      }
+      .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+      }
+      .password-requirements {
+        font-size: 0.85rem;
+        color: #6c757d;
+        margin-top: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row justify-content-center">
+        <div class="col-md-6 col-lg-5">
+          <div class="register-card">
+            <div class="register-header">
+              <div class="brand-icon">
+                <i class="fas fa-user-plus"></i>
+              </div>
+              <h3 class="text-white mb-0 fw-bold">Create Account</h3>
+              <p class="text-white-50 mb-0 mt-2">
+                Join the Clothes Warehouse community
+              </p>
+            </div>
+
+            <div class="card-body p-4">
+              <!-- Error Messages -->
+              <div
+                th:if="${error}"
+                class="alert alert-danger alert-dismissible fade show"
+                role="alert"
+              >
+                <i class="fas fa-exclamation-circle me-2"></i>
+                <span th:text="${error}"></span>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="alert"
+                ></button>
+              </div>
+
+              <form action="/register" method="post" th:object="${user}">
+                <div class="mb-3">
+                  <label for="username" class="form-label">
+                    <i class="fas fa-user me-2 text-primary"></i>Username
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="fas fa-user"></i>
+                    </span>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="username"
+                      name="username"
+                      placeholder="Enter your username"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="email" class="form-label">
+                    <i class="fas fa-envelope me-2 text-info"></i>Email Address
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="fas fa-envelope"></i>
+                    </span>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                      placeholder="Enter your email"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="password" class="form-label">
+                    <i class="fas fa-lock me-2 text-success"></i>Password
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="fas fa-lock"></i>
+                    </span>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="password"
+                      name="password"
+                      placeholder="Enter your password"
+                      required
+                    />
+                  </div>
+                  <div class="password-requirements">
+                    <small>
+                      <i class="fas fa-info-circle me-1"></i>
+                      Password must be at least 6 characters long
+                    </small>
+                  </div>
+                </div>
+
+                <div class="mb-3">
+                  <label for="confirmPassword" class="form-label">
+                    <i class="fas fa-lock me-2 text-warning"></i>Confirm
+                    Password
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="fas fa-lock"></i>
+                    </span>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      placeholder="Confirm your password"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <label for="role" class="form-label">
+                    <i class="fas fa-user-tag me-2 text-danger"></i>Role
+                  </label>
+                  <div class="input-group">
+                    <span class="input-group-text">
+                      <i class="fas fa-user-tag"></i>
+                    </span>
+                    <select class="form-select" id="role" name="role" required>
+                      <option value="">Select your role</option>
+                      <option value="USER">User</option>
+                      <option value="ADMIN">Administrator</option>
+                    </select>
+                  </div>
+                  <div class="password-requirements">
+                    <small>
+                      <i class="fas fa-info-circle me-1"></i>
+                      Choose your role in the system
+                    </small>
+                  </div>
+                </div>
+
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-register text-white">
+                    <i class="fas fa-user-plus me-2"></i>Create Account
+                  </button>
+                </div>
+              </form>
+
+              <div class="text-center mt-4">
+                <p class="text-muted mb-2">Already have an account?</p>
+                <a href="/login" class="btn btn-login">
+                  <i class="fas fa-sign-in-alt me-2"></i>Sign In
+                </a>
+              </div>
+
+              <div class="text-center mt-4">
+                <a href="/" class="text-decoration-none">
+                  <i class="fas fa-home me-1"></i>Back to Home
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // Password confirmation validation
+      document
+        .getElementById("confirmPassword")
+        .addEventListener("input", function () {
+          const password = document.getElementById("password").value;
+          const confirmPassword = this.value;
+
+          if (password !== confirmPassword) {
+            this.setCustomValidity("Passwords do not match");
+          } else {
+            this.setCustomValidity("");
+          }
+        });
+
+      // Password strength validation
+      document
+        .getElementById("password")
+        .addEventListener("input", function () {
+          const password = this.value;
+
+          if (password.length < 6) {
+            this.setCustomValidity(
+              "Password must be at least 6 characters long"
+            );
+          } else {
+            this.setCustomValidity("");
+          }
+        });
+    </script>
+  </body>
+</html>
