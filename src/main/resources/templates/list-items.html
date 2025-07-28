@@ -15,152 +15,328 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
       rel="stylesheet"
     />
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+      .main-container {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        margin: 20px;
+        padding: 30px;
+      }
+      .header-card {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 15px;
+        color: white;
+        padding: 20px;
+        margin-bottom: 30px;
+      }
+      .filter-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 20px;
+      }
+      .table-card {
+        background: rgba(255, 255, 255, 0.9);
+        border: none;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        overflow: hidden;
+      }
+      .table {
+        margin-bottom: 0;
+      }
+      .table thead th {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        font-weight: 600;
+        padding: 15px 12px;
+      }
+      .table tbody tr {
+        transition: all 0.3s ease;
+      }
+      .table tbody tr:hover {
+        background-color: rgba(102, 126, 234, 0.1);
+        transform: translateY(-1px);
+      }
+      .table tbody td {
+        padding: 12px;
+        vertical-align: middle;
+        border-color: rgba(0, 0, 0, 0.05);
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+      .btn-success {
+        background: linear-gradient(135deg, #56ab2f 0%, #a8e6cf 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-success:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(86, 171, 47, 0.4);
+      }
+      .btn-warning {
+        background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        color: white;
+      }
+      .btn-warning:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(25, 84, 123, 0.4);
+        color: white;
+      }
+      .btn-danger {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        border: none;
+        border-radius: 8px;
+        padding: 8px 16px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+      }
+      .btn-outline-primary {
+        border: 2px solid #667eea;
+        border-radius: 8px;
+        color: #667eea;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-outline-primary:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+      .btn-outline-secondary {
+        border: 2px solid #6c757d;
+        border-radius: 8px;
+        color: #6c757d;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-outline-secondary:hover {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        border-color: transparent;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+      }
+      .badge {
+        border-radius: 6px;
+        padding: 6px 10px;
+        font-size: 0.8rem;
+        font-weight: 600;
+      }
+      .form-control,
+      .form-select {
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+      }
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+      }
+      .pagination .page-link {
+        border-radius: 8px;
+        margin: 0 2px;
+        border: none;
+        color: #667eea;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .pagination .page-link:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: translateY(-1px);
+      }
+      .pagination .page-item.active .page-link {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+      }
+      .modal-content {
+        border-radius: 15px;
+        border: none;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      }
+      .modal-header {
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        border-radius: 15px 15px 0 0;
+        border: none;
+      }
+      .alert {
+        border-radius: 10px;
+        border: none;
+      }
+    </style>
   </head>
-  <body class="bg-light">
-    <div class="container-fluid mt-4">
+  <body>
+    <div class="main-container">
       <!-- Header -->
-      <div class="row mb-4">
-        <div class="col-12">
-          <div class="d-flex justify-content-between align-items-center">
-            <h2 class="text-primary">
-              <i class="fas fa-tshirt me-2"></i>Clothes Warehouse
-            </h2>
-            <div>
-              <!-- Authentication buttons -->
-              <div sec:authorize="!isAuthenticated()" class="me-2 d-inline">
-                <a href="/login" class="btn btn-outline-primary me-2">
-                  <i class="fas fa-sign-in-alt me-2"></i>Login
-                </a>
-              </div>
+      <div class="header-card">
+        <div class="d-flex justify-content-between align-items-center">
+          <h2 class="mb-0 fw-bold">
+            <i class="fas fa-tshirt me-2"></i>Clothes Warehouse
+          </h2>
+          <div>
+            <!-- Authentication buttons -->
+            <div sec:authorize="!isAuthenticated()" class="me-2 d-inline">
+              <a href="/login" class="btn btn-light me-2">
+                <i class="fas fa-sign-in-alt me-2"></i>Login
+              </a>
+            </div>
 
-              <div sec:authorize="isAuthenticated()" class="me-2 d-inline">
-                <span class="text-muted me-2">
-                  <i class="fas fa-user me-1"></i>
-                  Welcome, <span sec:authentication="name"></span> (<span
-                    sec:authentication="principal.authorities"
-                  ></span
-                  >)
-                </span>
-              </div>
+            <div sec:authorize="isAuthenticated()" class="me-2 d-inline">
+              <span class="text-light me-2">
+                <i class="fas fa-user me-1"></i>
+                Welcome, <span sec:authentication="name"></span> (<span
+                  sec:authentication="principal.authorities"
+                ></span
+                >)
+              </span>
+            </div>
 
-              <!-- Admin-only buttons -->
-              <div sec:authorize="hasRole('ADMIN')" class="d-inline">
-                <a href="/admin/dashboard" class="btn btn-outline-primary me-2">
-                  <i class="fas fa-cogs me-2"></i>Admin Dashboard
-                </a>
-                <a href="/items/add" class="btn btn-success me-2">
-                  <i class="fas fa-plus me-2"></i>Add New Item
-                </a>
-              </div>
+            <!-- Admin-only buttons -->
+            <div sec:authorize="hasRole('ADMIN')" class="d-inline">
+              <a href="/admin/dashboard" class="btn btn-light me-2">
+                <i class="fas fa-cogs me-2"></i>Admin Dashboard
+              </a>
+              <a href="/items/add" class="btn btn-success me-2">
+                <i class="fas fa-plus me-2"></i>Add New Item
+              </a>
+            </div>
 
-              <!-- Logout button for authenticated users -->
-              <div sec:authorize="isAuthenticated()" class="d-inline">
-                <form th:action="@{/logout}" method="post" class="d-inline">
-                  <button type="submit" class="btn btn-outline-secondary">
-                    <i class="fas fa-sign-out-alt me-2"></i>Logout
-                  </button>
-                </form>
-              </div>
+            <!-- Logout button for authenticated users -->
+            <div sec:authorize="isAuthenticated()" class="d-inline">
+              <form th:action="@{/logout}" method="post" class="d-inline">
+                <button type="submit" class="btn btn-outline-light">
+                  <i class="fas fa-sign-out-alt me-2"></i>Logout
+                </button>
+              </form>
             </div>
           </div>
         </div>
       </div>
 
       <!-- Filter Section -->
-      <div class="row mb-4">
-        <div class="col-12">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title">
-                <i class="fas fa-filter me-2"></i>Quick Filters
-              </h5>
-              <div class="row">
-                <div class="col-md-3 mb-2">
-                  <label for="brandFilter" class="form-label"
-                    >Filter by Brand (2022)</label
-                  >
-                  <div class="input-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="brandFilter"
-                      placeholder="Enter brand name"
-                    />
-                    <button
-                      class="btn btn-outline-primary"
-                      type="button"
-                      onclick="filterByBrandAndYear2022()"
-                    >
-                      <i class="fas fa-search"></i>
-                    </button>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-2">
-                  <label class="form-label">Popular Brands</label>
-                  <div class="d-flex gap-2 flex-wrap">
-                    <button
-                      class="btn btn-sm btn-outline-secondary"
-                      onclick="filterByBrand('Nike')"
-                    >
-                      Nike
-                    </button>
-                    <button
-                      class="btn btn-sm btn-outline-secondary"
-                      onclick="filterByBrand('Adidas')"
-                    >
-                      Adidas
-                    </button>
-                    <button
-                      class="btn btn-sm btn-outline-secondary"
-                      onclick="filterByBrand('Levi\'s')"
-                    >
-                      Levi's
-                    </button>
-                    <button
-                      class="btn btn-sm btn-outline-secondary"
-                      onclick="filterByBrand('Calvin Klein')"
-                    >
-                      Calvin Klein
-                    </button>
-                    <button
-                      class="btn btn-sm btn-outline-secondary"
-                      onclick="filterByBrand('Tommy Hilfiger')"
-                    >
-                      Tommy Hilfiger
-                    </button>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-2">
-                  <label class="form-label">Filter by Year</label>
-                  <div class="d-flex gap-2 flex-wrap">
-                    <button
-                      class="btn btn-sm btn-outline-info"
-                      onclick="filterByYear(2021)"
-                    >
-                      2021
-                    </button>
-                    <button
-                      class="btn btn-sm btn-outline-info"
-                      onclick="filterByYear(2022)"
-                    >
-                      2022
-                    </button>
-                    <button
-                      class="btn btn-sm btn-outline-info"
-                      onclick="filterByYear(2023)"
-                    >
-                      2023
-                    </button>
-                  </div>
-                </div>
-                <div class="col-md-3 mb-2">
-                  <label class="form-label">Actions</label>
-                  <div class="d-flex gap-2">
-                    <a href="/items/list" class="btn btn-sm btn-outline-dark">
-                      <i class="fas fa-list me-1"></i>Show All
-                    </a>
-                  </div>
-                </div>
+      <div class="filter-card">
+        <div class="card-body p-4">
+          <h5 class="card-title fw-bold">
+            <i class="fas fa-filter me-2 text-primary"></i>Quick Filters
+          </h5>
+          <div class="row g-3">
+            <div class="col-md-3">
+              <label for="brandFilter" class="form-label fw-semibold"
+                >Filter by Brand (2022)</label
+              >
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="brandFilter"
+                  placeholder="Enter brand name"
+                />
+                <button
+                  class="btn btn-primary"
+                  type="button"
+                  onclick="filterByBrandAndYear2022()"
+                >
+                  <i class="fas fa-search"></i>
+                </button>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Popular Brands</label>
+              <div class="d-flex gap-2 flex-wrap">
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  onclick="filterByBrand('Nike')"
+                >
+                  Nike
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  onclick="filterByBrand('Adidas')"
+                >
+                  Adidas
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  onclick="filterByBrand('Levi\'s')"
+                >
+                  Levi's
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  onclick="filterByBrand('Calvin Klein')"
+                >
+                  Calvin Klein
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-primary"
+                  onclick="filterByBrand('Tommy Hilfiger')"
+                >
+                  Tommy Hilfiger
+                </button>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Filter by Year</label>
+              <div class="d-flex gap-2 flex-wrap">
+                <button
+                  class="btn btn-sm btn-outline-info"
+                  onclick="filterByYear(2021)"
+                >
+                  2021
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-info"
+                  onclick="filterByYear(2022)"
+                >
+                  2022
+                </button>
+                <button
+                  class="btn btn-sm btn-outline-info"
+                  onclick="filterByYear(2023)"
+                >
+                  2023
+                </button>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <label class="form-label fw-semibold">Actions</label>
+              <div class="d-flex gap-2">
+                <a href="/items/list" class="btn btn-sm btn-outline-secondary">
+                  <i class="fas fa-list me-1"></i>Show All
+                </a>
               </div>
             </div>
           </div>
@@ -169,232 +345,218 @@
 
       <!-- Filter Status -->
       <div
-        class="row mb-3"
+        class="mb-3"
         th:if="${filteredBrand != null or filteredYear != null}"
       >
-        <div class="col-12">
-          <div class="alert alert-info">
-            <i class="fas fa-info-circle me-2"></i>
-            <span th:if="${filteredBrand != null}"
-              >Filtered by brand: <strong th:text="${filteredBrand}"></strong
-            ></span>
-            <span th:if="${filteredYear != null}"
-              >Filtered by year: <strong th:text="${filteredYear}"></strong
-            ></span>
-            <a href="/items/list" class="btn btn-sm btn-outline-info ms-3"
-              >Clear Filters</a
-            >
-          </div>
+        <div class="alert alert-info border-0">
+          <i class="fas fa-info-circle me-2"></i>
+          <span th:if="${filteredBrand != null}"
+            >Filtered by brand: <strong th:text="${filteredBrand}"></strong
+          ></span>
+          <span th:if="${filteredYear != null}"
+            >Filtered by year: <strong th:text="${filteredYear}"></strong
+          ></span>
+          <a href="/items/list" class="btn btn-sm btn-outline-info ms-3"
+            >Clear Filters</a
+          >
         </div>
       </div>
 
       <!-- Items Table -->
-      <div class="row">
-        <div class="col-12">
-          <div class="card shadow">
-            <div class="card-header bg-white">
-              <div class="d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">
-                  <i class="fas fa-table me-2"></i>Items List
-                  <span
-                    class="badge bg-primary ms-2"
-                    th:text="${totalItems}"
-                  ></span>
-                </h5>
-                <div class="d-flex gap-2">
-                  <select
-                    class="form-select form-select-sm"
-                    style="width: auto"
-                    onchange="changeSort(this.value)"
-                  >
-                    <option value="id" th:selected="${sortBy == 'id'}">
-                      Sort by ID
-                    </option>
-                    <option value="name" th:selected="${sortBy == 'name'}">
-                      Sort by Name
-                    </option>
-                    <option value="brand" th:selected="${sortBy == 'brand'}">
-                      Sort by Brand
-                    </option>
-                    <option
-                      value="category"
-                      th:selected="${sortBy == 'category'}"
-                    >
-                      Sort by Category
-                    </option>
-                    <option value="price" th:selected="${sortBy == 'price'}">
-                      Sort by Price
-                    </option>
-                    <option value="year" th:selected="${sortBy == 'year'}">
-                      Sort by Year
-                    </option>
-                  </select>
-                  <button
-                    class="btn btn-sm btn-outline-secondary"
-                    onclick="toggleSortDirection()"
-                  >
-                    <i
-                      class="fas fa-sort"
-                      th:classappend="${sortDir == 'asc' ? 'fa-sort-up' : 'fa-sort-down'}"
-                    ></i>
-                  </button>
-                </div>
-              </div>
+      <div class="table-card">
+        <div class="card-header bg-transparent border-0 pt-4 px-4">
+          <div class="d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 fw-bold">
+              <i class="fas fa-table me-2 text-primary"></i>Items List
+              <span
+                class="badge bg-primary ms-2"
+                th:text="${totalItems}"
+              ></span>
+            </h5>
+            <div class="d-flex gap-2">
+              <select
+                class="form-select form-select-sm"
+                style="width: auto"
+                onchange="changeSort(this.value)"
+              >
+                <option value="id" th:selected="${sortBy == 'id'}">
+                  Sort by ID
+                </option>
+                <option value="name" th:selected="${sortBy == 'name'}">
+                  Sort by Name
+                </option>
+                <option value="brand" th:selected="${sortBy == 'brand'}">
+                  Sort by Brand
+                </option>
+                <option value="category" th:selected="${sortBy == 'category'}">
+                  Sort by Category
+                </option>
+                <option value="price" th:selected="${sortBy == 'price'}">
+                  Sort by Price
+                </option>
+                <option value="year" th:selected="${sortBy == 'year'}">
+                  Sort by Year
+                </option>
+              </select>
+              <button
+                class="btn btn-sm btn-outline-secondary"
+                onclick="toggleSortDirection()"
+              >
+                <i
+                  class="fas fa-sort"
+                  th:classappend="${sortDir == 'asc' ? 'fa-sort-up' : 'fa-sort-down'}"
+                ></i>
+              </button>
             </div>
-            <div class="card-body p-0">
-              <div class="table-responsive">
-                <table class="table table-hover mb-0">
-                  <thead class="table-light">
-                    <tr>
-                      <th>ID</th>
-                      <th>Name</th>
-                      <th>Brand</th>
-                      <th>Category</th>
-                      <th>Price</th>
-                      <th>Year</th>
-                      <th>Quantity</th>
-                      <th>Details</th>
-                      <th sec:authorize="hasRole('ADMIN')">Admin Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr
-                      th:each="item : ${items}"
-                      th:class="${itemStat.even} ? 'table-light' : ''"
+          </div>
+        </div>
+        <div class="card-body p-4">
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Brand</th>
+                  <th>Category</th>
+                  <th>Price</th>
+                  <th>Year</th>
+                  <th>Quantity</th>
+                  <th>Details</th>
+                  <th sec:authorize="hasRole('ADMIN')">Admin Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  th:each="item : ${items}"
+                  th:class="${itemStat.even} ? 'table-light' : ''"
+                >
+                  <td th:text="${item.id}"></td>
+                  <td>
+                    <strong th:text="${item.name}"></strong>
+                  </td>
+                  <td>
+                    <span
+                      class="badge bg-primary"
+                      th:text="${item.brand}"
+                    ></span>
+                  </td>
+                  <td>
+                    <span
+                      class="badge bg-secondary"
+                      th:text="${item.category}"
+                    ></span>
+                  </td>
+                  <td>
+                    <span
+                      class="text-success fw-bold"
+                      th:text="${'$' + item.price}"
+                    ></span>
+                  </td>
+                  <td>
+                    <span class="badge bg-info" th:text="${item.year}"></span>
+                  </td>
+                  <td>
+                    <span
+                      class="badge bg-warning text-dark"
+                      th:text="${item.quantity}"
+                    ></span>
+                  </td>
+                  <td>
+                    <a
+                      th:href="@{/items/{id}(id=${item.id})}"
+                      class="btn btn-sm btn-outline-primary"
+                      title="View Details"
                     >
-                      <td th:text="${item.id}"></td>
-                      <td>
-                        <strong th:text="${item.name}"></strong>
-                      </td>
-                      <td>
-                        <span
-                          class="badge bg-primary"
-                          th:text="${item.brand}"
-                        ></span>
-                      </td>
-                      <td>
-                        <span
-                          class="badge bg-secondary"
-                          th:text="${item.category}"
-                        ></span>
-                      </td>
-                      <td>
-                        <span
-                          class="text-success fw-bold"
-                          th:text="${'$' + item.price}"
-                        ></span>
-                      </td>
-                      <td>
-                        <span
-                          class="badge bg-info"
-                          th:text="${item.year}"
-                        ></span>
-                      </td>
-                      <td>
-                        <span
-                          class="badge bg-warning text-dark"
-                          th:text="${item.quantity}"
-                        ></span>
-                      </td>
-                      <td>
-                        <a
-                          th:href="@{/items/{id}(id=${item.id})}"
-                          class="btn btn-sm btn-outline-primary"
-                          title="View Details"
-                        >
-                          <i class="fas fa-eye"></i>
-                        </a>
-                      </td>
-                      <td sec:authorize="hasRole('ADMIN')">
-                        <a
-                          th:href="@{/items/edit/{id}(id=${item.id})}"
-                          class="btn btn-sm btn-outline-warning me-1"
-                          title="Edit Item"
-                        >
-                          <i class="fas fa-edit"></i>
-                        </a>
-                        <button
-                          class="btn btn-sm btn-outline-danger"
-                          title="Delete Item"
-                          data-bs-toggle="modal"
-                          data-bs-target="#deleteModal"
-                          th:data-item-id="${item.id}"
-                          th:data-item-name="${item.name}"
-                          th:data-item-brand="${item.brand}"
-                        >
-                          <i class="fas fa-trash"></i>
-                        </button>
-                      </td>
-                    </tr>
-                    <tr th:if="${#lists.isEmpty(items)}">
-                      <td
-                        sec:authorize="hasRole('ADMIN')"
-                        colspan="9"
-                        class="text-center py-4"
-                      >
-                        <i class="fas fa-box-open fa-2x text-muted mb-2"></i>
-                        <p class="text-muted">No items found</p>
-                      </td>
-                      <td
-                        sec:authorize="!hasRole('ADMIN')"
-                        colspan="8"
-                        class="text-center py-4"
-                      >
-                        <i class="fas fa-box-open fa-2x text-muted mb-2"></i>
-                        <p class="text-muted">No items found</p>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
+                      <i class="fas fa-eye"></i>
+                    </a>
+                  </td>
+                  <td sec:authorize="hasRole('ADMIN')">
+                    <a
+                      th:href="@{/items/edit/{id}(id=${item.id})}"
+                      class="btn btn-sm btn-outline-warning me-1"
+                      title="Edit Item"
+                    >
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <button
+                      class="btn btn-sm btn-outline-danger"
+                      title="Delete Item"
+                      data-bs-toggle="modal"
+                      data-bs-target="#deleteModal"
+                      th:data-item-id="${item.id}"
+                      th:data-item-name="${item.name}"
+                      th:data-item-brand="${item.brand}"
+                    >
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </td>
+                </tr>
+                <tr th:if="${#lists.isEmpty(items)}">
+                  <td
+                    sec:authorize="hasRole('ADMIN')"
+                    colspan="9"
+                    class="text-center py-5"
+                  >
+                    <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                    <p class="text-muted fs-5">No items found</p>
+                  </td>
+                  <td
+                    sec:authorize="!hasRole('ADMIN')"
+                    colspan="8"
+                    class="text-center py-5"
+                  >
+                    <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
+                    <p class="text-muted fs-5">No items found</p>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
 
       <!-- Pagination -->
-      <div class="row mt-4" th:if="${totalPages > 1}">
-        <div class="col-12">
-          <nav aria-label="Items pagination">
-            <ul class="pagination justify-content-center">
-              <li
-                class="page-item"
-                th:classappend="${currentPage == 0} ? 'disabled'"
+      <div class="mt-4" th:if="${totalPages > 1}">
+        <nav aria-label="Items pagination">
+          <ul class="pagination justify-content-center">
+            <li
+              class="page-item"
+              th:classappend="${currentPage == 0} ? 'disabled'"
+            >
+              <a
+                class="page-link"
+                th:href="@{/items/list(page=${currentPage - 1}, size=10, sortBy=${sortBy}, sortDir=${sortDir})}"
               >
-                <a
-                  class="page-link"
-                  th:href="@{/items/list(page=${currentPage - 1}, size=10, sortBy=${sortBy}, sortDir=${sortDir})}"
-                >
-                  <i class="fas fa-chevron-left"></i>
-                </a>
-              </li>
+                <i class="fas fa-chevron-left"></i>
+              </a>
+            </li>
 
-              <li
-                class="page-item"
-                th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
-                th:classappend="${pageNum == currentPage} ? 'active'"
-              >
-                <a
-                  class="page-link"
-                  th:href="@{/items/list(page=${pageNum}, size=10, sortBy=${sortBy}, sortDir=${sortDir})}"
-                  th:text="${pageNum + 1}"
-                ></a>
-              </li>
+            <li
+              class="page-item"
+              th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}"
+              th:classappend="${pageNum == currentPage} ? 'active'"
+            >
+              <a
+                class="page-link"
+                th:href="@{/items/list(page=${pageNum}, size=10, sortBy=${sortBy}, sortDir=${sortDir})}"
+                th:text="${pageNum + 1}"
+              ></a>
+            </li>
 
-              <li
-                class="page-item"
-                th:classappend="${currentPage == totalPages - 1} ? 'disabled'"
+            <li
+              class="page-item"
+              th:classappend="${currentPage == totalPages - 1} ? 'disabled'"
+            >
+              <a
+                class="page-link"
+                th:href="@{/items/list(page=${currentPage + 1}, size=10, sortBy=${sortBy}, sortDir=${sortDir})}"
               >
-                <a
-                  class="page-link"
-                  th:href="@{/items/list(page=${currentPage + 1}, size=10, sortBy=${sortBy}, sortDir=${sortDir})}"
-                >
-                  <i class="fas fa-chevron-right"></i>
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
+                <i class="fas fa-chevron-right"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
       </div>
     </div>
 
@@ -408,7 +570,7 @@
     >
       <div class="modal-dialog">
         <div class="modal-content">
-          <div class="modal-header bg-danger text-white">
+          <div class="modal-header">
             <h5 class="modal-title" id="deleteModalLabel">
               <i class="fas fa-exclamation-triangle me-2"></i>Confirm Delete
             </h5>

@@ -15,15 +15,89 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
       rel="stylesheet"
     />
+    <style>
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+      }
+      .main-card {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+        border: none;
+        border-radius: 20px;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+      }
+      .card-header {
+        background: linear-gradient(
+          135deg,
+          #667eea 0%,
+          #764ba2 100%
+        ) !important;
+        border-radius: 20px 20px 0 0 !important;
+        border: none;
+      }
+      .form-control,
+      .form-select {
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        transition: all 0.3s ease;
+        padding: 12px 15px;
+      }
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+      }
+      .input-group-text {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        color: white;
+        border-radius: 10px 0 0 10px;
+        font-weight: 600;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+      }
+      .btn-secondary {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        border: none;
+        border-radius: 10px;
+        padding: 12px 24px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(108, 117, 125, 0.4);
+      }
+      .form-label {
+        font-weight: 600;
+        color: #495057;
+        margin-bottom: 8px;
+      }
+      .text-danger {
+        font-size: 0.875rem;
+        margin-top: 5px;
+      }
+    </style>
   </head>
-  <body class="bg-light">
+  <body>
     <div class="container mt-4">
       <div class="row justify-content-center">
-        <div class="col-md-8">
-          <div class="card shadow">
-            <div class="card-header bg-primary text-white">
+        <div class="col-md-10">
+          <div class="card main-card">
+            <div class="card-header text-white">
               <div class="d-flex justify-content-between align-items-center">
-                <h3 class="mb-0">
+                <h3 class="mb-0 fw-bold">
                   <i class="fas fa-plus-circle me-2"></i>Add New Item to
                   Warehouse
                 </h3>
@@ -54,11 +128,13 @@
                 </div>
               </div>
             </div>
-            <div class="card-body">
+            <div class="card-body p-4">
               <form th:action="@{/items/add}" th:object="${item}" method="post">
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="name" class="form-label">Item Name *</label>
+                <div class="row g-4">
+                  <div class="col-md-6">
+                    <label for="name" class="form-label">
+                      <i class="fas fa-tag me-2 text-primary"></i>Item Name *
+                    </label>
                     <input
                       type="text"
                       class="form-control"
@@ -74,8 +150,10 @@
                     ></div>
                   </div>
 
-                  <div class="col-md-6 mb-3">
-                    <label for="brand" class="form-label">Brand *</label>
+                  <div class="col-md-6">
+                    <label for="brand" class="form-label">
+                      <i class="fas fa-copyright me-2 text-info"></i>Brand *
+                    </label>
                     <input
                       type="text"
                       class="form-control"
@@ -92,9 +170,11 @@
                   </div>
                 </div>
 
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="category" class="form-label">Category *</label>
+                <div class="row g-4 mt-2">
+                  <div class="col-md-6">
+                    <label for="category" class="form-label">
+                      <i class="fas fa-list me-2 text-success"></i>Category *
+                    </label>
                     <select
                       class="form-select"
                       id="category"
@@ -120,8 +200,10 @@
                     ></div>
                   </div>
 
-                  <div class="col-md-6 mb-3">
-                    <label for="year" class="form-label">Year *</label>
+                  <div class="col-md-6">
+                    <label for="year" class="form-label">
+                      <i class="fas fa-calendar me-2 text-warning"></i>Year *
+                    </label>
                     <input
                       type="number"
                       class="form-control"
@@ -140,9 +222,12 @@
                   </div>
                 </div>
 
-                <div class="row">
-                  <div class="col-md-6 mb-3">
-                    <label for="price" class="form-label">Price *</label>
+                <div class="row g-4 mt-2">
+                  <div class="col-md-6">
+                    <label for="price" class="form-label">
+                      <i class="fas fa-dollar-sign me-2 text-success"></i>Price
+                      *
+                    </label>
                     <div class="input-group">
                       <span class="input-group-text">$</span>
                       <input
@@ -163,8 +248,10 @@
                     ></div>
                   </div>
 
-                  <div class="col-md-6 mb-3">
-                    <label for="quantity" class="form-label">Quantity *</label>
+                  <div class="col-md-6">
+                    <label for="quantity" class="form-label">
+                      <i class="fas fa-boxes me-2 text-info"></i>Quantity *
+                    </label>
                     <input
                       type="number"
                       class="form-control"
@@ -183,7 +270,7 @@
                   </div>
                 </div>
 
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between mt-4">
                   <a href="/items/list" class="btn btn-secondary">
                     <i class="fas fa-arrow-left me-2"></i>Back to List
                   </a>
