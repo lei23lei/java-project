@@ -29,10 +29,16 @@ public class AdminController {
         try {
             model.addAttribute("distributionCenters", distributionCenterService.getAllDistributionCenters());
             model.addAttribute("totalWarehouseItems", itemService.getAllItemsList().size());
+            // Get available items organized by brand from distribution centers for dropdowns
+            Map<String, Object> itemsData = distributionCenterService.getAvailableItemsByBrand();
+            model.addAttribute("availableBrands", itemsData.get("brands"));
+            model.addAttribute("itemsByBrand", itemsData.get("itemsByBrand"));
         } catch (Exception e) {
             model.addAttribute("error", "Unable to load distribution centers: " + e.getMessage());
             model.addAttribute("distributionCenters", java.util.Collections.emptyList());
             model.addAttribute("totalWarehouseItems", itemService.getAllItemsList().size());
+            model.addAttribute("availableBrands", java.util.Collections.emptyList());
+            model.addAttribute("itemsByBrand", java.util.Collections.emptyMap());
         }
         return "admin-dashboard";
     }
@@ -57,6 +63,8 @@ public class AdminController {
         }
         return "redirect:/admin/dashboard";
     }
+    
+
     
     // Show distribution center details
     @GetMapping("/distribution-center/{id}")

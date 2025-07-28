@@ -135,6 +135,8 @@ public class DistributionCenterIntegrationService {
         return false;
     }
     
+
+    
     // Add item to warehouse stock
     private boolean addItemToWarehouse(String brand, String name, JsonNode centerResponse) {
         try {
@@ -281,8 +283,15 @@ public class DistributionCenterIntegrationService {
                 
                 // Request the specified quantity from this center
                 String requestUrl = distributionCenterApiUrl + "/" + centerId + "/request?quantity=" + quantity;
+                
+                // Create a new request body for the specific center request
+                Map<String, Object> requestItemBody = new HashMap<>();
+                requestItemBody.put("brand", brand);
+                requestItemBody.put("name", name);
+                HttpEntity<Map<String, Object>> requestItemEntity = new HttpEntity<>(requestItemBody, createAuthHeaders());
+                
                 ResponseEntity<String> requestResponse = restTemplate.exchange(
-                    requestUrl, HttpMethod.POST, entity, String.class);
+                    requestUrl, HttpMethod.POST, requestItemEntity, String.class);
                 
                 if (requestResponse.getStatusCode() == HttpStatus.OK) {
                     // Add items to warehouse stock
@@ -310,13 +319,31 @@ public class DistributionCenterIntegrationService {
                 itemRepository.save(item);
                 System.out.println("Updated warehouse stock for: " + name + " by " + brand + " (+" + quantity + ")");
             } else {
-                // Create new item in warehouse
+                // Create new item in warehouse - get details from distribution center
                 Item newItem = new Item();
                 newItem.setName(name);
                 newItem.setBrand(brand);
-                newItem.setCategory("Unknown"); // Default category
-                newItem.setPrice(new BigDecimal("0.00")); // Default price
-                newItem.setYear(2023); // Default year
+                
+                // Try to get actual item details from the center response
+                String category = "Unknown";
+                BigDecimal price = new BigDecimal("1.00"); // Default positive price
+                Integer year = 2023;
+                
+                if (centerResponse != null && centerResponse.has("items")) {
+                    for (JsonNode itemNode : centerResponse.get("items")) {
+                        if (itemNode.get("brand").asText().equals(brand) && 
+                            itemNode.get("name").asText().equals(name)) {
+                            category = itemNode.get("category").asText();
+                            price = new BigDecimal(itemNode.get("price").asText());
+                            year = itemNode.get("year").asInt();
+                            break;
+                        }
+                    }
+                }
+                
+                newItem.setCategory(category);
+                newItem.setPrice(price);
+                newItem.setYear(year);
                 newItem.setQuantity(quantity);
                 itemRepository.save(newItem);
                 System.out.println("Added new item to warehouse: " + name + " by " + brand + " (quantity: " + quantity + ")");
@@ -328,6 +355,49 @@ public class DistributionCenterIntegrationService {
         }
     }
 
+    // Get all available items organized by brand (only items with quantity > 0)
+    public Map<String, Object> getAvailableItemsByBrand() {
+        try {
+            HttpEntity<String> entity = new HttpEntity<>(createAuthHeaders());
+            ResponseEntity<String> response = restTemplate.exchange(
+                distributionCenterApiUrl, HttpMethod.GET, entity, String.class);
+            
+            if (response.getStatusCode() == HttpStatus.OK) {
+                JsonNode jsonNode = objectMapper.readTree(response.getBody());
+                Map<String, Map<String, Integer>> brandItemMap = new HashMap<>(); // brand -> (itemName -> totalQuantity)
+                Set<String> allBrands = new TreeSet<>();
+                
+                for (JsonNode centerNode : jsonNode) {
+                    if (centerNode.has("items") && centerNode.get("items").isArray()) {
+                        for (JsonNode itemNode : centerNode.get("items")) {
+                            if (itemNode.has("name") && itemNode.has("brand") && itemNode.has("quantity")) {
+                                int quantity = itemNode.get("quantity").asInt();
+                                if (quantity > 0) { // Only include items with available stock
+                                    String name = itemNode.get("name").asText();
+                                    String brand = itemNode.get("brand").asText();
+                                    
+                                    allBrands.add(brand);
+                                    
+                                    brandItemMap.computeIfAbsent(brand, k -> new HashMap<>());
+                                    brandItemMap.get(brand).merge(name, quantity, Integer::sum);
+                                }
+                            }
+                        }
+                    }
+                }
+                
+                Map<String, Object> result = new HashMap<>();
+                result.put("brands", new ArrayList<>(allBrands));
+                result.put("itemsByBrand", brandItemMap);
+                
+                return result;
+            }
+        } catch (Exception e) {
+            System.err.println("Error getting available items by brand: " + e.getMessage());
+        }
+        return Collections.emptyMap();
+    }
+    
     // Calculate distance using Haversine formula
     private double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
         final int R = 6371; // Radius of the earth in km
