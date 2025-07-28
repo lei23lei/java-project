@@ -1,0 +1,42 @@
+version: "3.8"
+
+services:
+  clothes-warehouse:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - JAVA_OPTS=-Xmx512m -Xms256m
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+    networks:
+      - clothes-network
+
+  # Optional: PostgreSQL database for production-like testing
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: clothes_warehouse
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - clothes-network
+    profiles:
+      - postgres
+
+networks:
+  clothes-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
